@@ -290,6 +290,7 @@
  mdp:/usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h
  mdp:/usr/include/x86_64-linux-gnu/gnu/stubs-64.h
  mdp:/usr/include/x86_64-linux-gnu/gnu/stubs.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QString
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qanystringview.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qarraydata.h
@@ -375,6 +376,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qtextstream.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qtmetamacros.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qtypeinfo.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qutf8stringview.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qvarlengtharray.h
@@ -395,29 +397,44 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qkeysequence.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qpaintdevice.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qpalette.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qpen.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qpixelformat.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qpixmap.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qpolygon.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qregion.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qrgb.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qrgba64.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtextcursor.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtextformat.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtextoption.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtgui-config.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiexports.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiglobal.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGridLayout
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QHBoxLayout
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStackedWidget
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTextEdit
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qframe.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgridlayout.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayoutitem.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsizepolicy.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstackedwidget.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgets-config.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsexports.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h
