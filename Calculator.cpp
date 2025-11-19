@@ -9,6 +9,7 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QLabel>
 
 using namespace std;
 
@@ -90,7 +91,7 @@ class Calculator: public QWidget
     {
       operationHistory.clear();
       historyTextEdit->clear();
-      historyTextEdit->append("History  has been cleared!");
+      historyTextEdit->append("History has been cleared!");
     }
     
     void showHistory()
@@ -112,6 +113,12 @@ class Calculator: public QWidget
       switcherWidget->setCurrentIndex(0);
     }
     
+    void exitApplication(){
+      QApplication::quit();
+    }
+    
+    
+    
   private:
     void setupCalculatorUI()
     {
@@ -125,29 +132,54 @@ class Calculator: public QWidget
       resultLineEdit->setStyleSheet("QLineEdit {font-size: 17px; padding: 8px; background-color: #f0f0f0;}"); // белый цвет фона
       
       historyButton = new QPushButton("Operation history"); // кнопка перехода к журналу операций
-      historyButton->setStyleSheet("QPushButton { font-size: 14px; padding: 8px; background-color: #4CAF50; color: white; }"); // зеленый фон, кнопка - белая
+      historyButton->setStyleSheet("QPushButton { font-size: 17 px; padding: 8px; background-color: #4CAF50; color: white; }"); // зеленый фон, кнопка - белая
+      
+      exitButton = new QPushButton("Exit");
+      exitButton->setStyleSheet("QPushButton { font-size: 17px; padding: 8px; background-color: #FF5722; color: white; }"); // оранжево - красный цвет
       
       QVBoxLayout *inputLayout = new QVBoxLayout; // макет для поля ввода, результата и истории операций
       inputLayout->addWidget(inputLineEdit);
       inputLayout->addWidget(resultLineEdit);
-      inputLayout->addWidget(historyButton);
+      
+      QHBoxLayout *topButtonLayout = new QHBoxLayout;
+      topButtonLayout->addWidget(historyButton);
+      topButtonLayout->addWidget(exitButton);
+      
+      inputLayout->addLayout(topButtonLayout);
       
       // кнопки для цифр
       QGridLayout *digitLayout = new QGridLayout;
+      digitLayout->setSpacing(3); // уменьшаем расстояние между кнопками
+      digitLayout->setContentsMargins(2,2,2,2); //уменьшаем отступы
+      
       for (int j=0;j < 9; ++j){
         QPushButton *button = createButton(QString::number(j+1),SLOT(onDigitClicked()));
-        digitLayout->addWidget(button, j / 3, j % 3); // 3 на 3 сетка для цифр с 1 до 9 
+        button->setStyleSheet("QPushButton { font-size: 18px; padding: 12px; background-color: #e0e0e0; }"
+                             "QPushButton:hover { background-color:#d0d0d0; }");
+        digitLayout->addWidget(button, j / 3, j % 3); // 3 на 3 сетка для цифр с 1 до 9
       }
       
       QPushButton *zeroButton = createButton("0",SLOT (onDigitClicked()));
+      zeroButton->setStyleSheet("QPushButton { font-size: 18px; padding: 12px; background-color: #e0e0e0; }"
+                               "QPushButton:hover { background-color:#d0d0d0; }");
       digitLayout->addWidget(zeroButton,3,0,1,3); // занимает всю строку: третья строка, 1 столбец и занимает всю первую строку и 3 столбца
       
       QVBoxLayout *operatorLayout = new QVBoxLayout; // для кнопок операторов +,-,*,/ и тд
+      operatorLayout->setSpacing(3);
       
-      QStringList operatorButtons = {"+", "-", "*", "/", "root", "pow", "log", "sin", "cos", "tg", "ctg"};
+      // очистка =
+      QPushButton *clearButton = createButton("C",SLOT(onClearClicked()));
+      clearButton-> setStyleSheet("QPushButton { font-size: 18px; padding: 10px; background-color:#f44336; color: white;}"); // задний фон красный, цвет белый
+      operatorLayout->addWidget(clearButton);
+      
+      //backsapce
+      QPushButton *backspaceButton = createButton("⌫",SLOT(onBackspaceClicked()));
+      operatorLayout->addWidget(backspaceButton);
+      
+      QStringList operatorButtons = {"(",")","+", "-", "*", "/", "√", "^", "log", "sin", "cos", "tg", "ctg"};
       for (const QString &text : operatorButtons) {
         QPushButton *button = createButton(text,SLOT(on_Operator_Clicked()));
-        button->setStyleSheet("QPushButton { font-size: 14px; padding: 10px; background-color: #FF9800; color: white; }"); // задний фон оранжевый цвет белый
+        button->setStyleSheet("QPushButton { font-size: 20px; padding: 10px; background-color: #FF9800; color: white; }"); // задний фон оранжевый цвет белый
         operatorLayout->addWidget(button);
       }
       
@@ -156,36 +188,68 @@ class Calculator: public QWidget
       equalButton-> setStyleSheet("QPushButton { font-size: 16px; padding: 10px; background-color:#2196F3; color: white;}"); // задний фон синий, цвет белый
       operatorLayout->addWidget(equalButton);
       
-      // очистка =
-      QPushButton *clearButton = createButton("C",SLOT(onClearClicked()));
-      clearButton-> setStyleSheet("QPushButton { font-size: 16px; padding: 10px; background-color:#f44336; color: white;}"); // задний фон красный, цвет белый
-      operatorLayout->addWidget(clearButton);
-      
-      //backsapce
-      QPushButton *backspaceButton = createButton("⌫",SLOT(onBackspaceClicked()));
-      operatorLayout->addWidget(backspaceButton);
-      
       QHBoxLayout *buttonLayout = new QHBoxLayout;
+      buttonLayout->setSpacing(5);
       buttonLayout->addLayout(digitLayout);
       buttonLayout->addLayout(operatorLayout);
       
       QVBoxLayout *calculatorLayout = new QVBoxLayout(calculatorWidget);
+      buttonLayout->setSpacing(8);
       calculatorLayout->addLayout(inputLayout);
       calculatorLayout->addLayout(buttonLayout);
       
       connect(historyButton, &QPushButton::clicked,this,&Calculator::showHistory);
+      connect(exitButton, &QPushButton::clicked,this,&Calculator::exitApplication);
       
     }
   
     void setupHistoryUI()
     {
-  
+      QVBoxLayout *historyLayout = new QVBoxLayout(historyWidget);
+      
+      // текст
+      QLabel *historyLabel = new QLabel ("History list");
+      historyLabel -> setStyleSheet("QLabel { font-size: 18px; font-weight: bold; padding: 10px; }");
+      
+      // поле отображение истории
+      historyTextEdit = new QTextEdit;
+      historyTextEdit->setReadOnly(true);
+      historyTextEdit->setStyleSheet("QTextEdit { font-size: 14px; padding: 10px; }");
+      
+      // кнопка вернуться
+      backButton = new QPushButton("Back");
+      backButton->setStyleSheet(
+                                "QPushButton {" 
+                                    "font-size: 14px;" 
+                                    "padding: 8px;" 
+                                    "font-weight: bold;" 
+                                    "background-color: #2196F3;"
+                                    "color: white; "
+                                "}"); // небесного цвета задний фон кнопки
+      
+      // кнопка очистить историю
+      clearHistoryButton = new QPushButton("Clear history");
+      clearHistoryButton->setStyleSheet("QPushButton { font-size: 14px; padding: 8px; font-weight: bold; background-color: #f44336; color: white; }"); // красный цвет задний фон 
+      
+      // макеты для кнопок
+      QHBoxLayout *buttonLayout = new QHBoxLayout;
+      buttonLayout->addWidget(backButton);
+      buttonLayout->addWidget(clearHistoryButton);
+      
+      historyLayout->addWidget(historyLabel);
+      historyLayout->addWidget(historyTextEdit);
+      historyLayout->addLayout(buttonLayout);
+      
+      // подключение кнопок
+      connect(backButton, &QPushButton::clicked,this,&Calculator::showCalculator);
+      connect(clearHistoryButton,&QPushButton::clicked,this,&Calculator::on_ClearHistory_Clicked);
+      
     }
   
     QPushButton *createButton(const QString &text, const char *member)
     {
       QPushButton *button = new QPushButton(text);
-      button -> setStyleSheet("QPushButton { font-size: 16px; padding: 10px; background-color: #e0e0e0; }" "QPushButton:hover { background-color:#d0d0d0; }"); // серый цвет у кнопки,чуть темнее серый при наведении мышкой
+      button -> setStyleSheet("QPushButton { font-size: 22px; padding: 20px; background-color: #e0e0e0; }" "QPushButton:hover { background-color:#d0d0d0; }"); // серый цвет у кнопки,чуть темнее серый при наведении мышкой
       connect(button,SIGNAL(clicked()),this,member);
       return button;
     }
@@ -204,26 +268,23 @@ class Calculator: public QWidget
     QLineEdit *inputLineEdit;
     QLineEdit *resultLineEdit;
     QPushButton *historyButton;
+    QPushButton *exitButton;
   
     // элементы истории
     QTextEdit *historyTextEdit;
     QPushButton *backButton;
     QPushButton *clearHistoryButton;
     
-    vector<QPair<QString, QString>> operationHistory;
+    vector<QPair<QString, QString>> operationHistory; // контейнер для хранения истории операций калькулятора
 
 };
-
-
-
-
-
 
 
 int main(int argc, char *argv[]) {
   QApplication app(argc,argv);
   
   Calculator calculator;
+  calculator.resize(500, 600); 
   calculator.show();
   
   return app.exec();
