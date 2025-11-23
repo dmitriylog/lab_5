@@ -290,6 +290,7 @@
  mdp:/usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h
  mdp:/usr/include/x86_64-linux-gnu/gnu/stubs-64.h
  mdp:/usr/include/x86_64-linux-gnu/gnu/stubs.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QString
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qanystringview.h
@@ -351,6 +352,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qprocessordetection.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qrect.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qrefcount.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qscopedpointer.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qscopeguard.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h
@@ -420,6 +422,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QHBoxLayout
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLabel
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMessageBox
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStackedWidget
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTextEdit
@@ -429,12 +432,14 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qframe.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgridlayout.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlabel.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayoutitem.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmessagebox.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsizepolicy.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstackedwidget.h
