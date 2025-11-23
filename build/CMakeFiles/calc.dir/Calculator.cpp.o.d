@@ -395,4 +395,7 @@ CMakeFiles/calc.dir/Calculator.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+ /usr/include/c++/13/stack /usr/include/c++/13/deque \
+ /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
+ /usr/include/c++/13/bits/stl_stack.h \
  /home/d1m1d1n/Рабочий\ стол/5lab/lab_5/build/calc_autogen/include/Calculator.moc
