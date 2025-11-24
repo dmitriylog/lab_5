@@ -85,6 +85,19 @@ class Calculator: public QWidget
       // здесь логика вычислений остальных ребят
       // все, кто писал свои функции по вычислениям, добавляйте их сюда(перед QString result = "Expression" + expression;) последовательно, состыкую с интерфейсом уже я
       //================================= временно создаю строку "Вычисление" + само выражение ===============================================================
+        
+      // Ульянов Валерий - Возведение в степень  
+      float Degree(float num, float deg) {
+      int k = 1; float sum = num;
+      while (k < deg) {
+    	  sum *= num;
+    	  k += 1;
+    	  }
+      return sum;
+     }
+
+
+        
       QString result = "Expression" + expression;
       resultLineEdit->setText(result);
       
