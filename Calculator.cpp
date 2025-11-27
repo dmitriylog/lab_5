@@ -95,7 +95,16 @@ class Calculator: public QWidget
     	  }
       return sum;
      }
-
+     
+      //Григорьев Игнат - Операция тангенса
+      float tangent_deg(float degrees) {
+        float radians = degrees * M_PI / 180.0f;
+        float mod = fmod(fabs(degrees), 180.0f);
+        if (fabs(mod - 90.0f) < 1e-6) {
+          throw std::runtime_error("Тангенс не определён при углах 90 + 180*k градусов!");
+        }
+        return tan(radians);
+     }
 
         
       QString result = "Expression" + expression;
