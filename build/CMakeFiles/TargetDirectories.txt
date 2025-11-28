@@ -1,0 +1,5 @@
+/home/d1m1d1n/Рабочий стол/5lab/lab_5/build/CMakeFiles/calc.dir
+/home/d1m1d1n/Рабочий стол/5lab/lab_5/build/CMakeFiles/edit_cache.dir
+/home/d1m1d1n/Рабочий стол/5lab/lab_5/build/CMakeFiles/rebuild_cache.dir
+/home/d1m1d1n/Рабочий стол/5lab/lab_5/build/CMakeFiles/calc_autogen_timestamp_deps.dir
+/home/d1m1d1n/Рабочий стол/5lab/lab_5/build/CMakeFiles/calc_autogen.dir
