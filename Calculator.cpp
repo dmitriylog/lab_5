@@ -15,6 +15,7 @@
 #include <stack>
 
 
+
 using namespace std;
 
 // класс калькулятора с т.з. графической составляющей
@@ -95,7 +96,59 @@ class Calculator: public QWidget
     	  }
       return sum;
      }
+    
+	//Ивлева Диана - Вычисление логарифма_______________________________________
+// Функция принимает число x
+double ln(double x) {
+    
+    if (x <= 0) return 0.0; // в основании логарифма не может быть ноль
 
+    double y = (x - 1.0) / (x + 1.0);
+    double y2 = y * y;
+
+    double term = y;      // первый член ряда
+    double sum = term;    // сумма начинается с первого члена
+    int n = 1;            // n - номера знаменателей
+
+    for (int k = 1; k < 100000; ++k) { 
+        term *= y2;                 // чтобы степени были 3,5,7...
+        double add = term / (2 * k + 1); // знаменатель: 3,5,7,...
+        sum += add;
+        if (add > 0 && add < 1e-14) break; // достаточно малая точность
+        if (add < 0 && -add < 1e-14) break;
+    }
+    return 2.0 * sum;
+}
+
+// Основная функция логарифма по основанию base: log_base(value) = ln(value) / ln(base)
+double log(double base, double value) {
+    if (base <= 0 || base == 1.0) {
+        cout << "Error: base will be > 0 and != 1\n";  //ограничение
+        return 0.0;
+    }
+    if (value <= 0) {
+        cout << "Error: value will be > 0\n";         //ограничение
+        return 0.0;
+    }
+
+    // если value == 1 -> логарифм всегда 0
+    if (value == 1.0) return 0.0;
+
+    
+    double ln_b = ln(value);
+    double ln_a = ln(base);
+
+    // защита от деления на ноль
+    if (ln_a == 0.0) {
+        cout << "Error: ln(base) = 0\n";
+        return 0.0;
+    }
+
+    return ln_b / ln_a;
+}
+
+
+//_______________________________________________________________________
 
         
       QString result = "Expression" + expression;
