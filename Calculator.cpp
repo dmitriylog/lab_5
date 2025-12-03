@@ -82,6 +82,8 @@ class Calculator: public QWidget
         return;
       }
 
+
+
       // здесь логика вычислений остальных ребят
       // все, кто писал свои функции по вычислениям, добавляйте их сюда(перед QString result = "Expression" + expression;) последовательно, состыкую с интерфейсом уже я
       //================================= временно создаю строку "Вычисление" + само выражение ===============================================================
@@ -158,7 +160,23 @@ double log(double base, double value) {
         }
         return tan(radians);
      }
+// Функция для вычисления корня n-ной степени
+float nRoot(float number, float n) {
+    if (n == 0) {
+        throw std::runtime_error("Root degree cannot be zero!");
+    }
 
+    if (number < 0 && fmod(n, 2) == 0) {
+        throw std::runtime_error("Even root of negative number is not defined!");
+    }
+
+    if (number < 0) {
+        // Корень нечетной степени из отрицательного числа
+        return -pow(-number, 1.0 / n);
+    }
+
+    return pow(number, 1.0 / n);
+}
 
       QString result = "Expression" + expression;
       resultLineEdit->setText(result);
