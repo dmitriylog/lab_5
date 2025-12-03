@@ -160,24 +160,39 @@ double log(double base, double value) {
         }
         return tan(radians);
      }
-// Функция для вычисления корня n-ной степени
-float nRoot(float number, float n) {
-    if (n == 0) {
-        throw std::runtime_error("Root degree cannot be zero!");
+//  функции вычисления любого корня - Даша
+double root(double a, int n, double eps = 1e-10) {
+    if (a == 0) return 0;
+    if (n == 1) return a;
+
+    // Обработка отрицательных чисел
+    bool neg = false;
+    if (a < 0) {
+        if (n % 2 == 0) return 0.0/0.0; // NaN
+        neg = true;
+        a = -a;
     }
 
-    if (number < 0 && fmod(n, 2) == 0) {
-        throw std::runtime_error("Even root of negative number is not defined!");
-    }
+    // Начальное приближение
+    double x = (a > 1) ? a / n : 1.0;
+    double prev;
 
-    if (number < 0) {
-        // Корень нечетной степени из отрицательного числа
-        return -pow(-number, 1.0 / n);
-    }
+    do {
+        prev = x;
 
-    return pow(number, 1.0 / n);
+        // Вычисляем x^(n-1)
+        double pow = 1.0;
+        for (int i = 0; i < n - 1; i++) {
+            pow *= x;
+        }
+
+        // Формула Ньютона
+        x = ((n - 1) * x + a / pow) / n;
+
+    } while ((x > prev ? x - prev : prev - x) > eps);
+
+    return neg ? -x : x;
 }
-
       QString result = "Expression" + expression;
       resultLineEdit->setText(result);
 
