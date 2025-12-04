@@ -13,8 +13,7 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <stack>
-
-
+#include <cmath>
 
 using namespace std;
 
@@ -82,6 +81,8 @@ class Calculator: public QWidget
         showError(errorMessage);
         return;
       }
+
+
 
       // здесь логика вычислений остальных ребят
       // все, кто писал свои функции по вычислениям, добавляйте их сюда(перед QString result = "Expression" + expression;) последовательно, состыкую с интерфейсом уже я
@@ -166,8 +167,40 @@ double log(double base, double value) {
         }
         return tan(radians);
      }
+//  функции вычисления любого корня - Даша
+double root(double a, int n, double eps = 1e-10) {
+    if (a == 0) return 0;
+    if (n == 1) return a;
+
+    // Обработка отрицательных чисел
+    bool neg = false;
+    if (a < 0) {
+        if (n % 2 == 0) return 0.0/0.0; // NaN
+        neg = true;
+        a = -a;
+    }
 
 
+    // Начальное приближение
+    double x = (a > 1) ? a / n : 1.0;
+    double prev;
+
+    do {
+        prev = x;
+
+        // Вычисляем x^(n-1)
+        double pow = 1.0;
+        for (int i = 0; i < n - 1; i++) {
+            pow *= x;
+        }
+
+        // Формула Ньютона
+        x = ((n - 1) * x + a / pow) / n;
+
+    } while ((x > prev ? x - prev : prev - x) > eps);
+
+    return neg ? -x : x;
+}
       QString result = "Expression" + expression;
       resultLineEdit->setText(result);
 
