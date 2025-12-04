@@ -97,6 +97,13 @@ class Calculator: public QWidget
     	  }
       return sum;
      }
+     //Дмитриев Никита -Операция деления
+     double divider(double dividend, double divisor) {
+    if (divisor == 0.0) {
+        throw std::invalid_argument("Division by zero");
+    }
+    return dividend / divisor;
+}
 
 	//Ивлева Диана - Вычисление логарифма_______________________________________
 // Функция принимает число x
@@ -172,6 +179,7 @@ double root(double a, int n, double eps = 1e-10) {
         neg = true;
         a = -a;
     }
+
 
     // Начальное приближение
     double x = (a > 1) ? a / n : 1.0;
