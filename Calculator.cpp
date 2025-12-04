@@ -97,7 +97,7 @@ class Calculator: public QWidget
       return sum;
      }
      //Дмитриев Никита -Операция деления
-     double divide(double dividend, double divisor) {
+     double divider(double dividend, double divisor) {
     if (divisor == 0.0) {
         throw std::invalid_argument("Division by zero");
     }
