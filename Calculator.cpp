@@ -181,6 +181,20 @@ double root(double a, int n, double eps = 1e-10) {
     }
 
 
+
+    // Кулиев Заур -вычитание и сложение
+    int substraction(int a, int b) {
+        return a - b;
+    }
+
+    int summation(int a, int b) {
+        return a + b;
+    }
+
+
+
+
+
     // Начальное приближение
     double x = (a > 1) ? a / n : 1.0;
     double prev;
