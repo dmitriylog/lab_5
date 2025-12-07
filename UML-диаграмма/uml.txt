@@ -1,0 +1,45 @@
+@startuml
+left to right direction
+
+actor Пользователь
+actor Разработчик
+
+rectangle "Калькулятор" {
+  (Ввод выражения) as input
+  (Просмотр результата) as result
+  (История операций) as history
+  
+  (Сложение/Вычитание) as basic1
+  (Умножение/Деление) as basic2
+  (Степень/Корень) as advance1
+  (Логарифмы) as advance2
+  (Тригонометрия) as trig
+  
+  (Разработка GUI) as dev1
+  (Реализация операций) as dev2
+  (Тестирование) as dev3
+  (Журналирование) as dev4
+}
+
+Пользователь --> input
+Пользователь --> result
+Пользователь --> history
+Пользователь --> basic1
+Пользователь --> basic2
+Пользователь --> advance1
+Пользователь --> advance2
+Пользователь --> trig
+
+Разработчик --> dev1
+Разработчик --> dev2
+Разработчик --> dev3
+Разработчик --> dev4
+
+input .> result : включает
+input .> basic1 : включает
+input .> basic2 : включает
+input .> advance1 : включает
+input .> advance2 : включает
+input .> trig : включает
+
+@enduml

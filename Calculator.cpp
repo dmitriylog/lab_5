@@ -155,6 +155,21 @@ double log(double base, double value) {
     return ln_b / ln_a;
 }
 
+    //Лёдов Даниил - Умножение, синус 
+    double multiplication(int a, int b) {
+        return a * b;
+    }
+
+    double sinus(double degrees) {
+        // 1. Конвертируем градусы в радианы
+        double radians = degrees * (3.14159265 / 180.0);
+
+        // 2. Вычисляем синус от радиан
+        double result = std::sin(radians);
+
+        return result;
+    }
+
 
 //_______________________________________________________________________
 
@@ -179,6 +194,20 @@ double root(double a, int n, double eps = 1e-10) {
         neg = true;
         a = -a;
     }
+
+
+
+    // Кулиев Заур -вычитание и сложение
+    int substraction(int a, int b) {
+        return a - b;
+    }
+
+    int summation(int a, int b) {
+        return a + b;
+    }
+
+
+
 
 
     // Начальное приближение
