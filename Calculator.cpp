@@ -112,7 +112,7 @@ float cotangent_deg(float degrees) {
     float mod = fmod(fabs(degrees), 180.0f);
     
     if (fabs(mod) < 1e-6) {
-        throw std::runtime_error("Котангенс не определён при углах 0 + 180*k градусов!");
+        throw std::runtime_error("Котангенс не определён при углах 0 + 180*k градусов! ");
     }
     
     float tan_value = tan(radians);
