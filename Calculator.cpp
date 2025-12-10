@@ -53,7 +53,7 @@ private slots:
         }
     }
     
-    // ИСПРАВЛЕНО: Теперь добавляет '(' после '√'
+    // клик на любой оператор
     void on_Operator_Clicked()
     {
         QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
@@ -86,10 +86,10 @@ private slots:
         }
         
         try {
-            // Вычисление выражения
+            // вычисление выражения
             double result = evaluateExpression(expression);
             
-            // Проверка на NaN или бесконечность
+            // проверка на 0 или бесконечность
             if (std::isnan(result) || std::isinf(result)) {
                 showError("Calculation resulted in an undefined or infinite value.");
                 return;
@@ -97,7 +97,7 @@ private slots:
 
             QString resultStr = QString::number(result, 'f', 6);
             
-            // Убираем лишние нули после точки
+            // убираю лишние нули после точки
             while (resultStr.contains('.') && (resultStr.endsWith('0') || resultStr.endsWith('.'))) {
                 resultStr.chop(1);
                 if (resultStr.endsWith('.')) {
@@ -124,12 +124,12 @@ private slots:
     {
         QString text = inputLineEdit->text();
         if (!text.isEmpty()){
-            // Удаление пробела перед оператором/функцией
+            // удаление пробела перед оператором/функцией
             if (text.endsWith(" ")) {
                 text.chop(1);
             }
             
-            // Обработка удаления целых операторов или функций
+            // обработка удаления целых операторов или функций
             if (text.endsWith("+") || text.endsWith("-") || text.endsWith("*") || text.endsWith("/") || text.endsWith("^") || text.endsWith("√") || text.endsWith("(") || text.endsWith(")")) {
                 inputLineEdit->setText(text.left(text.length() - 1));
                 return;
@@ -179,11 +179,10 @@ private slots:
     
     void onTextChanged(const QString &text)
     {
-        // Убрана автоматическая обрезка, чтобы дать пользователю возможность закончить слово (например, 's', 'si', 'sin')
-        // ВАЖНО: Мы игнорируем ошибку, чтобы дать пользователю закончить ввод, но для проверки символов используем isValidPartialExpression.
+        // для проверки символов используем isValidPartialExpression.
         if (!isValidPartialExpression(text)) {
-            // Если введен недопустимый символ, мы все равно показываем ошибку, но не обрезаем текст.
-            // При ошибке вычисления onEqualsClicked покажет более точное сообщение.
+            // если введен недопустимый символ - показываем ошибку, но не обрезаем текст.
+            // при ошибке вычисления onEqualsClicked покажет более точное сообщение.
         }
     }
     
@@ -191,7 +190,7 @@ private:
     void setupCalculatorUI()
     {
         inputLineEdit = new QLineEdit;
-        inputLineEdit->setPlaceholderText("Enter expression (e.g., 2 + 3 * sin(30), log(10, 100))");
+        inputLineEdit->setPlaceholderText("Enter expression (e.g., 2 + 3)");
         inputLineEdit->setStyleSheet("QLineEdit { font-size:17px; padding: 8px; }");
         
         connect(inputLineEdit, &QLineEdit::textChanged, this, &Calculator::onTextChanged);
@@ -225,15 +224,15 @@ private:
                                  "QPushButton:hover { background-color:#d0d0d0; }");
         digitLayout->addWidget(zeroButton,3,0,1,3);
         
-        // Кнопка для запятой
+        // кнопка для запятой
         QPushButton *commaButton = createButton(",",SLOT(onDigitClicked()));
-        commaButton->setStyleSheet("QPushButton { font-size: 18px; padding: 12px; background-color: #e0e0e0; }"
+        commaButton->setStyleSheet("QPushButton { font-size: 17px; padding: 8px; background-color: #e0e0e0; }"
                                   "QPushButton:hover { background-color:#d0d0d0; }");
         digitLayout->addWidget(commaButton,4,1); 
 
-        // Кнопка для точки
+        // кнопка для точки
         QPushButton *dotButton = createButton(".",SLOT(onDigitClicked()));
-        dotButton->setStyleSheet("QPushButton { font-size: 18px; padding: 12px; background-color: #e0e0e0; }"
+        dotButton->setStyleSheet("QPushButton { font-size: 17px; padding: 8px; background-color: #e0e0e0; }"
                                   "QPushButton:hover { background-color:#d0d0d0; }");
         digitLayout->addWidget(dotButton,4,0);
 
@@ -250,12 +249,13 @@ private:
         operatorLayout->addWidget(clearButton);
         
         QPushButton *backspaceButton = createButton("⌫",SLOT(onBackspaceClicked()));
+        backspaceButton->setStyleSheet("QPushButton { font-size: 18px; padding: 10px; color: grey}");
         operatorLayout->addWidget(backspaceButton);
         
-        QStringList operatorButtons = {"(",")","+", "-", "*", "/", "√", "^", "log", "sin", "cos", "tg", "ctg"};
+        QStringList operatorButtons = {"(",")","+", "-", "*", "/", "√", "^", "log","e", "sin", "cos", "tg", "ctg"};
         for (const QString &text : operatorButtons) {
             QPushButton *button = createButton(text,SLOT(on_Operator_Clicked()));
-            button->setStyleSheet("QPushButton { font-size: 20px; padding: 10px; background-color: #FF9800; color: white; }");
+            button->setStyleSheet("QPushButton { font-size: 17px; padding: 10px; background-color: #FF9800; color: white; }");
             operatorLayout->addWidget(button);
         }
         
@@ -458,7 +458,7 @@ private:
         return cos(radians);
     }
     
-    // Вспомогательная функция для нахождения соответствующей закрывающей скобки
+    // вспомогательная функция для нахождения соответствующей закрывающей скобки
     int findMatchingParen(const QString& expression, int start) {
         if (expression[start] != '(') return -1;
         int count = 1;
@@ -475,42 +475,39 @@ private:
         return -1;
     }
     
-    // Функция для парсинга и вычисления выражений
+    // функция для парсинга и вычисления выражений
     double evaluateExpression(const QString& expression) {
         QString expr = expression;
         expr.replace(" ", "");
         
-        // Заменяем функции с одним аргументом на символы для упрощения парсинга
+        // заменяю функции с одним аргументом на символы для упрощения парсинга
         expr.replace("sin(", "s(");
         expr.replace("cos(", "c(");
         expr.replace("tg(", "t(");
         expr.replace("ctg(", "g(");
         expr.replace("√(", "r(");
+      
         
-        // Обрабатываем степени
+        // обрабатываю степени
         expr.replace("^", "p");
         
-        // Создаем стеки для чисел и операторов
+        // создаю стеки для чисел и операторов
         stack<double> values;
         stack<QChar> ops;
         
         for (int i = 0; i < expr.length(); i++) {
-            // Если текущий символ - цифра или точка, парсим число
-            if (expr[i].isDigit() || expr[i] == '.') {
+            bool isUnaryMinus = false;
+            if (expr[i] == '-'){
+                if (i == 0 || expr[i-1] == '(' || isOperator(expr[i-1])){
+                    isUnaryMinus = true;
+                }
+            }
+            // если текущий символ - цифра или точка или унарный минус, то парсим число
+            if (expr[i].isDigit() || expr[i] == '.' || isUnaryMinus) {
                 QString numStr;
-                // Добавлена обработка возможного отрицательного числа в начале или после (
-                // Убедимся, что это не часть числа, а унарный минус
-                if (i > 0 && expr[i-1] == '-' && (i-1 == 0 || expr[i-2] == '(' || isOperator(expr[i-2]))) {
-                    numStr += expr[i-1];
-                    // Если унарный минус был, откатываем i на 1, чтобы снова обработать текущую цифру
-                    // Но, поскольку мы уже обработали его в предыдущем шаге, просто пропускаем его здесь
-                    // Лучше: если перед цифрой был минус, и он еще не был обработан как бинарный оператор, 
-                    // нужно его учесть. В данной реализации это сложно, поэтому мы полагаемся на то, что
-                    // минус перед числом в начале выражения или после '(' будет считаться частью числа в этом блоке.
-                    
-                    // Однако, текущий парсер RPN основан на том, что операторы обрабатываются позже. 
-                    // Проще всего: если перед числом стоит "-", и перед ним стоит оператор или скобка,
-                    // считаем это унарным минусом, который уже был добавлен в стек операторов
+                if (isUnaryMinus){
+                    numStr += '-';
+                    i++;
                 }
 
                 while (i < expr.length() && (expr[i].isDigit() || expr[i] == '.')) {
@@ -519,17 +516,21 @@ private:
                 }
                 i--;
 
-                // Заменяем запятую на точку для toDouble
+                // заменяю запятую на точку для toDouble
                 numStr.replace(",", "."); 
                 
-                // Если numStr содержит только '-', это не число
+                // если numStr содержит только '-', это не число
                 if (numStr == "-" || numStr.isEmpty()) {
                      throw runtime_error("Invalid number format.");
                 }
 
                 values.push(numStr.toDouble());
             }
-            // Специальная обработка для log(base, value)
+            else if (expr[i] == 'e'){
+              values.push(M_E); // M_E - cmath константа для е
+            }
+            
+            // специальная обработка для log(base, value)
             else if (i + 3 < expr.length() && expr.mid(i, 3) == "log" && expr[i+3] == '(') {
                 int openParen = i + 3;
                 int closeParen = findMatchingParen(expr, openParen);
@@ -548,14 +549,14 @@ private:
                 QString baseStr = logContent.left(commaIndex).trimmed();
                 QString valueStr = logContent.mid(commaIndex + 1).trimmed();
 
-                // Рекурсивно вызываем evaluateExpression для вычисления аргументов.
+                // рекурсивно вызываю evaluateExpression для вычисления аргументов.
                 double base = evaluateExpression(baseStr); 
                 double value = evaluateExpression(valueStr);
                 
                 double result = log(base, value);
                 values.push(result);
                 
-                i = closeParen; // Пропускаем всю обработанную часть log(...)
+                i = closeParen; // пропускаю всю обработанную часть log(...)
                 continue;
             }
             // Если открывающая скобка - добавляем в стек операторов
@@ -571,10 +572,10 @@ private:
                     QChar op = ops.top(); ops.pop();
                     values.push(applyOperator(op, val1, val2));
                 }
-                if (!ops.empty()) ops.pop(); // Удаляем '('
+                if (!ops.empty()) ops.pop(); // удаляю '('
                 else throw runtime_error("Unmatched closing parenthesis ')'");
                 
-                // Проверяем, была ли перед скобкой функция (s, c, t, g, r)
+                // проверяю, была ли перед скобкой функция (s, c, t, g, r)
                 if (!ops.empty() && isFunction(ops.top())) {
                     QChar func = ops.top(); ops.pop();
                     if (values.empty()) throw runtime_error("Missing operand for function");
@@ -582,22 +583,18 @@ private:
                     values.push(applyFunction(func, val));
                 }
             }
-            // Если оператор
+            
             else if (isOperator(expr[i]) || isFunction(expr[i])) {
-                // Обработка унарного минуса (если - стоит в начале или после ( )
+                // обработка унарного минуса (если - стоит в начале или после ( )
                 if (expr[i] == '-') {
                     bool isUnary = (i == 0 || expr[i-1] == '(');
-                    // Если это унарный минус, мы можем неявно умножить следующее число на -1.
-                    // Однако, для простоты RPN парсера, мы пока что просто обрабатываем его как оператор.
-                    // Если следующий символ - это число, то он будет включен в numStr, 
-                    // и эта ветка кода будет пропущена.
                 }
 
-                // Если это функция - добавляем в стек операторов
+                // если это функция - добавляю в стек операторов
                 if (isFunction(expr[i])) {
                     ops.push(expr[i]);
                 }
-                // Если это оператор
+                // если это оператор
                 else {
                     while (!ops.empty() && precedence(ops.top()) >= precedence(expr[i])) {
                         if (values.size() < 2) throw runtime_error("Missing operands");
@@ -609,19 +606,15 @@ private:
                     ops.push(expr[i]);
                 }
             } else {
-                // Игнорируем запятую, если она не была обработана log(...)
+                // игнорирую запятую, если она не была обработана log(...)
                 if (expr[i] != ',') {
                      throw runtime_error(QString("Unknown symbol: %1").arg(expr[i]).toStdString());
                 }
             }
         }
         
-        // Применяем оставшиеся операторы
+        // применяю оставшиеся операторы
         while (!ops.empty()) {
-            // Если в стеке остался оператор, но только одно значение, это ошибка,
-            // кроме случая, когда это унарный оператор, что не поддерживается явно
-            // в этой реализации RPN, за исключением унарного минуса, который 
-            // обрабатывается в блоке чисел.
             if (values.size() < 2) throw runtime_error("Missing operands");
             double val2 = values.top(); values.pop();
             double val1 = values.top(); values.pop();
@@ -657,12 +650,11 @@ private:
             case '-': return substraction(a, b);
             case '*': return multiplication(a, b);
             case '/': return divider(a, b);
-            case 'p': return Degree(a, b); // Возведение в степень
+            case 'p': return Degree(a, b); // возведение в степень
             default: throw runtime_error("Unknown operator");
         }
     }
     
-    // ИСПРАВЛЕНО: Убраны невидимые символы, вызывавшие ошибку компиляции
     double applyFunction(QChar func, double val) {
         switch (func.toLatin1()) {
             case 's': return sinus(val);      // sin
@@ -675,7 +667,7 @@ private:
         }
     }
     
-    // Проверки выражений
+    // проверки выражений
     bool isValidExpression(const QString &expression, QString &errorMessage) {
         QString cleanExpression = expression;
         cleanExpression.replace(" ","");
@@ -718,20 +710,13 @@ private:
             QChar next = expression[i+1];
             
             if (operators.contains(current) && operators.contains(next)) {
-                // Разрешаем: --, ++, (+, (-
-                if (!((current == '-' && next == '-') ||(current == '+' && next == '+') || (current == '(' && (next == '+' || next == '-')) || (i==0 && (current == '+' || current == '-')))) {
-                    // Разрешаем знаки +/- после (
-                    if (current == '(' && (next == '+' || next == '-')) continue;
-                    // Разрешаем знаки +/- в начале
-                    if (i == 0 && (current == '+' || current == '-')) continue;
-                    
-                    // Проверяем, что не стоит оператор после функции
-                    if (expression.mid(i - 3, 3) == "sin" || expression.mid(i - 3, 3) == "cos" || expression.mid(i - 3, 3) == "ctg" || expression.mid(i - 3, 3) == "log") continue;
-
+                if (next == '-') continue;
+                // Разрешаем ++ или -- (хотя это редкость, но математически допустимо как унарный плюс/минус)
+                if ((current == '-' && next == '-') || (current == '+' && next == '+')) continue;
                     errorMessage = QString("Double operators '%1%2' are not allowed!").arg(current).arg(next);
                     return false;
                 }
-            }
+            
             
             if (current == '(' && operators.contains(next) && next != '+' && next !='-') {
                 errorMessage = QString("Operator '%1' cannot follow opening parenthesis").arg(next);
@@ -742,14 +727,14 @@ private:
                 errorMessage = QString("Operator '%1' cannot precede closing parenthesis").arg(current);
                 return false;
             }
-        }
+        }    
         return true;
     }
     
     bool checkValidSymbols(const QString &expression, QString &errorMessage) {
-        // Добавлена запятая для log(base, value)
-        // ВАЖНО: Мы проверяем только, что символы принадлежат допустимому набору
-        QRegularExpression validChars("[0-9+\\-*/.\\^√()\\s,a-z]+");
+        // добавлена запятая для log(base, value)
+        // мы проверяем только, что символы принадлежат допустимому набору
+        QRegularExpression validChars("[0-9+\\-*/.\\^√()\\s,e]+|log|sin|cos|tg|ctg");
         QRegularExpressionMatchIterator i = validChars.globalMatch(expression);
         
         QString matched;
@@ -771,7 +756,7 @@ private:
         QChar first_ch = expression[0];
         QString operators = "+-*/^";
         
-        // Разрешаем + или - в начале
+        // разрешаю + или - в начале
         if (operators.contains(first_ch) && first_ch != '+' && first_ch != '-') {
             errorMessage = QString ("Expression cannot start with operator '%1'").arg(first_ch);
             return false;
@@ -786,25 +771,25 @@ private:
     
     
     bool isValidPartialExpression(const QString &expression) {
-        // Допустимые символы, которые могут быть вводиться по одному
-        QRegularExpression validChars("[0-9+\\-*/.\\^()\\s,]+"); 
+        // допустимые символы, которые могут быть вводиться по одному
+        QRegularExpression validChars("[0-9+\\-*/.\\^()\\s,e]+"); 
         
         int i = 0;
         while (i < expression.length()) {
             QChar ch = expression[i];
             
-            // Если символ не является одиночным допустимым символом
+            // если символ не является одиночным допустимым символом
             if (!validChars.match(ch).hasMatch()) {
                 QString remaining = expression.mid(i);
                 
                 if (remaining.startsWith("log")) {
-                    i += 3; // Пропускаем 'l', 'o', 'g'
-                } else if (remaining.startsWith("sin") || remaining.startsWith("cos") || remaining.startsWith("ctg")) {
-                    i += 3; // Пропускаем 's', 'i', 'n' и т.д.
-                } else if (remaining.startsWith("tg")) {
-                    i += 2; // Пропускаем 't', 'g'
-                } else if (remaining.startsWith("√")) { // <-- Обработка символа корня
-                    i += 1; // Пропускаем '√'
+                    i += 3; // пропускаем 'l', 'o', 'g'
+                } else if (remaining.startsWith("sin") || remaining.startsWith("cos") || remaining.startsWith("ctg")) { // обработка sin cos ctg
+                    i += 3; // пропускаем 's', 'i', 'n' и т.д.
+                } else if (remaining.startsWith("tg")) { // обработка символа tg
+                    i += 2; // пропускаем 't', 'g'
+                } else if (remaining.startsWith("√")) { // обработка символа корня
+                    i += 1; // пропускаем '√'
                 } else {
                     return false;
                 }
