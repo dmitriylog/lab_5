@@ -1,0 +1,155 @@
+@startuml
+title Диаграмма классов для калькулятора
+
+class Calculator {
+  - switcherWidget: QStackedWidget*
+  - calculatorWidget: QWidget*
+  - historyWidget: QWidget*
+  - inputLineEdit: QLineEdit*
+  - resultLineEdit: QLineEdit*
+  - historyButton: QPushButton*
+  - exitButton: QPushButton*
+  - historyTextEdit: QTextEdit*
+  - backButton: QPushButton*
+  - clearHistoryButton: QPushButton*
+  - operationHistory: vector<QPair<QString, QString>>
+  --
+  + Calculator(parent: QWidget* = nullptr)
+  - setupCalculatorUI(): void
+  - setupHistoryUI(): void
+  - createButton(text: const QString&, member: const char*): QPushButton*
+  - add_to_History(operation: const QString&, result: const QString&): void
+  - isValidExpression(expression: const QString&, errorMessage: QString&): boolean
+  - checkSkobki(expression: const QString&, errorMessage: QString&): boolean
+  - checkDoubleOp(expression: const QString&, errorMessage: QString&): boolean
+  - checkValidSymbols(expression: const QString&, errorMessage: QString&): boolean
+  - checkStructure(expression: const QString&, errorMessage: QString&): boolean
+  - isValidPartialExpression(expression: const QString&): boolean
+  - showError(message: const QString&): void
+  - findMatchingParen(expression: const QString&, start: int): int
+  - evaluateExpression(expression: const QString&): double
+  - isOperator(op: QChar): boolean
+  - isFunction(op: QChar): boolean
+  - precedence(op: QChar): int
+  - applyOperator(op: QChar, a: double, b: double): double
+  - applyFunction(func: QChar, val: double): double
+  - Degree(num: double, deg: double): double
+  - divider(dividend: double, divisor: double): double
+  - ln(x: double): double
+  - log(base: double, value: double): double
+  - multiplication(a: double, b: double): double
+  - sinus(degrees: double): double
+  - tangent_deg(degrees: double): double
+  - root(a: double, n: int, eps: double = 1e-10): double
+  - substraction(a: double, b: double): double
+  - summation(a: double, b: double): double
+  - cotangent_deg(degrees: double): double
+  - cosinus(degrees: double): double
+}
+
+' === SLOTS (методы-слоты) ===
+note top of Calculator
+Слоты (обработчики событий):
+Calculator : onDigitClicked()
+Calculator : on_Operator_Clicked()
+Calculator : onEqualsClicked()
+Calculator : onClearClicked()
+Calculator : onBackspaceClicked()
+Calculator : on_ClearHistory_Clicked()
+Calculator : showHistory()
+Calculator : showCalculator()
+Calculator : exitApplication()
+Calculator : onTextChanged(text: const QString&)
+end note
+
+' === БАЗОВЫЕ КЛАССЫ Qt ===
+class QWidget {
+  + show(): void
+  + resize(w: int, h: int): void
+}
+
+class QLineEdit {
+  + setText(text: const QString&): void
+  + text(): QString
+  + clear(): void
+  + setReadOnly(enable: boolean): void
+  + setStyleSheet(style: const QString&): void
+}
+
+class QPushButton {
+  + setText(text: const QString&): void
+  + setStyleSheet(style: const QString&): void
+}
+
+class QTextEdit {
+  + append(text: const QString&): void
+  + clear(): void
+  + setReadOnly(enable: boolean): void
+}
+
+class QStackedWidget {
+  + addWidget(widget: QWidget*): void
+  + setCurrentIndex(index: int): void
+}
+
+class QVBoxLayout
+class QHBoxLayout
+class QGridLayout
+class QLabel
+class QMessageBox
+class QApplication
+
+' === ОТНОШЕНИЯ НАСЛЕДОВАНИЯ ===
+QWidget <|-- Calculator
+QWidget <|-- QLineEdit
+QWidget <|-- QPushButton
+QWidget <|-- QTextEdit
+QWidget <|-- QStackedWidget
+QWidget <|-- QLabel
+QWidget <|-- QMessageBox
+
+' === КОМПОЗИЦИЯ (составные части) ===
+Calculator *-- QStackedWidget : содержит
+Calculator *-- QLineEdit : содержит (2 экземпляра)
+Calculator *-- QPushButton : содержит (много экземпляров)
+Calculator *-- QTextEdit : содержит
+'Calculator *-- Vector<QPair<QString, QString>> : содержит
+
+QStackedWidget o-- QWidget : управляет виджетами
+
+' === АССОЦИАЦИИ ===
+Calculator --> QVBoxLayout : использует
+Calculator --> QHBoxLayout : использует
+Calculator --> QGridLayout : использует
+Calculator --> QApplication : запускает	+Calculator(parent: QWidget* = nullptr)
+
+
+' === ЗАВИСИМОСТИ ===
+Calculator ..> cmath : использует математические функции
+Calculator ..> stack : использует стек
+Calculator ..> vector : использует вектор
+Calculator ..> map : использует map
+Calculator ..> limits : использует numeric_limits
+
+' === МЕТОДЫ ВЫЧИСЛЕНИЙ С АВТОРАМИ ===
+note bottom of Calculator
+Методы вычислений с авторами:
+- Degree() - Ульянов Валерий (возведение в степень)
+- divider() - Дмитриев Никита (деление)
+- ln(), log() - Ивлева Диана (логарифмы)
+- multiplication(), sinus() - Лёдов Даниил
+- tangent_deg() - Григорьев Игнат (тангенс)
+- root() - Даша (корень n-й степени)
+- substraction(), summation() - Кулиев Заур
+- cotangent_deg() - Малаев Давид
+- cosinus() - реализован в основном классе
+end note
+  
+' === ДОПОЛНИТЕЛЬНЫЕ СТРУКТУРЫ ===
+class "QPair<QString, QString>" {
+  - first: QString
+  - second: QString
+  --
+  + qMakePair(): static
+}
+@enduml
