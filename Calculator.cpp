@@ -340,7 +340,7 @@ private:
         return dividend / divisor;
     }
     
-    //Ивлева Диана - Вычисление логарифма
+    //Ивлева Диана - Вычисление натурального логарифма
     double ln(double x) {
         if (x <= 0) return 0.0;
         
