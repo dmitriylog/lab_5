@@ -1,0 +1,169 @@
+@startuml
+title Диаграмма последовательности: Вычисление логарифма log(base, value)
+
+actor "Пользователь" as User
+participant "UI (QPushButton)" as UIButton
+participant "Calculator::on_Operator_Clicked()" as OnOperatorClick
+participant "QLineEdit (input)" as InputField
+participant "Calculator::onEqualsClicked()" as OnEqualsClick
+participant "Calculator::isValidExpression()" as Validation
+participant "Calculator::evaluateExpression()" as EvaluateExpr
+participant "Calculator::findMatchingParen()" as FindParen
+participant "Calculator::log()" as LogFunction
+participant "Calculator::ln()" as LnFunction
+participant "Calculator::divider()" as Divider
+participant "QLineEdit (result)" as ResultField
+participant "Calculator::add_to_History()" as HistoryManager
+participant "QMessageBox" as MessageBox
+
+autonumber 1
+
+== Ввод выражения ==
+
+User -> UIButton : Нажимает кнопку "log"
+UIButton -> OnOperatorClick : Сигнал clicked()
+activate OnOperatorClick
+
+OnOperatorClick -> InputField : Добавляет " log(" в текст
+note right: Специальная обработка для log\ninputLineEdit->setText(text + " " + op + "(")
+
+deactivate OnOperatorClick
+
+User -> InputField : Вводит "2,8)"\n(полное выражение: "log(2,8)")
+
+== Вычисление выражения ==
+
+User -> UIButton : Нажимает кнопку "="
+UIButton -> OnEqualsClick : Сигнал clicked()
+activate OnEqualsClick
+
+OnEqualsClick -> InputField : Получает текст "log(2,8)"
+InputField --> OnEqualsClick : "log(2,8)"
+
+OnEqualsClick -> Validation : Проверяет isValidExpression("log(2,8)")
+activate Validation
+
+Validation -> Validation : checkValidSymbols()
+Validation -> Validation : checkSkobki()
+Validation -> Validation : checkDoubleOp()
+Validation -> Validation : checkStructure()
+
+Validation --> OnEqualsClick : true (выражение корректно)
+deactivate Validation
+
+OnEqualsClick -> EvaluateExpr : evaluateExpression("log(2,8)")
+activate EvaluateExpr
+
+group Парсинг выражения
+    EvaluateExpr -> EvaluateExpr : replace(" ", "") → "log(2,8)"
+    EvaluateExpr -> EvaluateExpr : Ищет "log(" в строке
+    EvaluateExpr -> FindParen : findMatchingParen(expr, позиция "(")
+    activate FindParen
+    FindParen --> EvaluateExpr : Позиция закрывающей скобки ")"
+    deactivate FindParen
+    
+    EvaluateExpr -> EvaluateExpr : Извлекает "2,8" из log(...)
+    EvaluateExpr -> EvaluateExpr : Разделяет по запятой → "2" и "8"
+    
+    group Рекурсивное вычисление аргументов
+        EvaluateExpr -> EvaluateExpr : evaluateExpression("2")
+        EvaluateExpr --> EvaluateExpr : 2.0
+        
+        EvaluateExpr -> EvaluateExpr : evaluateExpression("8")
+        EvaluateExpr --> EvaluateExpr : 8.0
+    end
+    
+    EvaluateExpr -> LogFunction : log(2.0, 8.0)
+    activate LogFunction
+end
+
+group Вычисление логарифма
+    LogFunction -> LogFunction : Проверка: base > 0 && base != 1
+    LogFunction -> LogFunction : Проверка: value > 0
+    LogFunction -> LnFunction : ln(8.0) для value
+    activate LnFunction
+    
+    group Вычисление натурального логарифма (ряд Тейлора)
+        LnFunction -> LnFunction : y = (8-1)/(8+1) = 7/9
+        LnFunction -> LnFunction : y2 = y*y
+        LnFunction -> LnFunction : term = y, sum = term
+        loop для k=1..99999 (до точности 1e-14)
+            LnFunction -> LnFunction : term *= y2
+            LnFunction -> LnFunction : add = term/(2*k+1)
+            LnFunction -> LnFunction : sum += add
+            LnFunction -> LnFunction : Проверка |add| < 1e-14
+        end
+        LnFunction -> LnFunction : result = 2.0 * sum
+        LnFunction --> LogFunction : ln(8) ≈ 2.07944154
+    end
+    deactivate LnFunction
+    
+    LogFunction -> LnFunction : ln(2.0) для base
+    activate LnFunction
+    LnFunction -> LnFunction : Аналогичное вычисление через ряд Тейлора
+    LnFunction --> LogFunction : ln(2) ≈ 0.69314718
+    deactivate LnFunction
+    
+    LogFunction -> LogFunction : Проверка ln(base) ≠ 0
+    LogFunction -> Divider : divider(ln_value, ln_base)\n2.07944154 / 0.69314718
+    activate Divider
+    Divider -> Divider : Проверка divisor ≠ 0
+    Divider --> LogFunction : 3.0
+    deactivate Divider
+    
+    LogFunction --> EvaluateExpr : 3.0
+end
+deactivate LogFunction
+
+EvaluateExpr --> OnEqualsClick : 3.0
+deactivate EvaluateExpr
+
+group Обработка и вывод результата
+    OnEqualsClick -> OnEqualsClick : Проверка isNaN() и isinf()
+    OnEqualsClick -> OnEqualsClick : Форматирование: QString::number(3.0, 'f', 6)
+    OnEqualsClick -> OnEqualsClick : Удаление лишних нулей: "3.000000" → "3"
+    
+    OnEqualsClick -> ResultField : setText("3")
+    
+    OnEqualsClick -> HistoryManager : add_to_History("log(2,8)", "3")
+    activate HistoryManager
+    HistoryManager -> HistoryManager : operationHistory.push_back(qMakePair(...))
+    HistoryManager --> OnEqualsClick
+    deactivate HistoryManager
+end
+
+deactivate OnEqualsClick
+
+== Альтернативный сценарий: Ошибка ввода ==
+
+group Пример ошибки: неверный аргумент
+    User -> InputField : Вводит "log(2, -8)"
+    User -> UIButton : Нажимает "="
+    UIButton -> OnEqualsClick : clicked()
+    activate OnEqualsClick
+    
+    OnEqualsClick -> InputField : Получает "log(2, -8)"
+    OnEqualsClick -> Validation : isValidExpression()
+    Validation --> OnEqualsClick : true
+    OnEqualsClick -> EvaluateExpr : evaluateExpression()
+    activate EvaluateExpr
+    
+    EvaluateExpr -> LogFunction : log(2.0, -8.0)
+    activate LogFunction
+    LogFunction -> LogFunction : Проверка value > 0 → false
+    LogFunction -> LogFunction : Бросает исключение "Value must be > 0"
+    LogFunction --> EvaluateExpr : Исключение
+    deactivate LogFunction
+    
+    EvaluateExpr --> OnEqualsClick : Исключение
+    deactivate EvaluateExpr
+    
+    OnEqualsClick -> MessageBox : showError("Calculation error: Value must be > 0")
+    activate MessageBox
+    MessageBox -> User : Показывает диалог ошибки
+    deactivate MessageBox
+    
+    deactivate OnEqualsClick
+end
+
+@enduml
